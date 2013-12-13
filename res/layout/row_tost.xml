@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="74dp"
+    android:background="@drawable/list_frame" >
+
+    <TextView
+        android:id="@+id/tvQuoteNum"
+        android:layout_width="38dp"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:ellipsize="marquee"
+        android:gravity="center_vertical|center_horizontal"
+        android:singleLine="true"
+        android:text="1"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvQuoteTagLine"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvQuoteLine"
+        android:layout_toRightOf="@+id/imageRowLabel"
+        android:layout_marginRight="25dp"
+        android:ellipsize="marquee"
+        android:gravity="center_vertical"
+        android:paddingRight="@dimen/activity_horizontal_margin_small"
+        android:singleLine="true"
+        android:text="Tags"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tvQuoteLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_marginRight="25dp"
+        android:layout_toRightOf="@id/tvQuoteNum"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="2"
+        android:paddingLeft="@dimen/activity_horizontal_margin_small"
+        android:paddingRight="@dimen/activity_horizontal_margin_small"
+        android:paddingTop="@dimen/activity_vertical_margin_small"
+        android:text="The citizen who thinks he sees that the commonwealth&apos;s political th&apos;s political"
+        android:textSize="14sp" />
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayoutLeftLine"
+        android:layout_width="5dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/bg_left_bar"
+        android:orientation="vertical"
+        android:visibility="gone" >
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageRowStar"
+        android:layout_width="16dp"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/ic_action_not_important" />
+
+    <ImageView
+        android:id="@+id/imageRowLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:layout_alignLeft="@+id/tvQuoteLine"
+        android:layout_alignTop="@+id/tvQuoteTagLine"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/ic_action_labels" />
+
+</RelativeLayout>
