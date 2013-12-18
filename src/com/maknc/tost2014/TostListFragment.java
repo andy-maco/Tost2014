@@ -1,7 +1,5 @@
 package com.maknc.tost2014;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +10,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
-import android.graphics.drawable.Drawable;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,6 +25,7 @@ import com.maknc.tost2014.parsers.JSONParser;
 
 public class TostListFragment extends Fragment {
 	
+	private SharedPreferences sharedPref;
 	List<HashMap<String, String>> tList = new ArrayList<HashMap<String, String>>();
 	
 	@Override
@@ -37,8 +35,13 @@ public class TostListFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_tost_list,
 				container, false);
 		
+		/* Read favorites list */
+		sharedPref = getActivity().getSharedPreferences(Config.PREFS, Context.MODE_PRIVATE);
+		String defValue = "";
+		String fav = sharedPref.getString(Config.PREFS_FAVORITES_KEY, defValue);
 		
-		tList = getTosts(R.raw.newtost2014);
+		
+		tList = getTosts(R.raw.newtost2014, fav);
 		
 		//Log.d("AAA", "qList: " + qList);
 
@@ -86,9 +89,11 @@ public class TostListFragment extends Fragment {
 	 * @param url
 	 * @return
 	 */
-	private ArrayList<HashMap<String, String>> getTosts(int ResID) {
-
+	private ArrayList<HashMap<String, String>> getTosts(int ResID, String fv) {
+		
 		ArrayList<HashMap<String, String>> mItemList = new ArrayList<HashMap<String, String>>();
+		
+		boolean isFav = false;
 
 		// Creating JSON Parser instance
 		JSONParser jParser = new JSONParser();
@@ -111,8 +116,13 @@ public class TostListFragment extends Fragment {
 				JSONObject oneObject = jArray.getJSONObject(i);
 				// Pulling items from the array
 				//Items[i] = oneObject.getString(Config.JSON_ID);
+				
+				String currentId = oneObject.getString(Config.JSON_ID);
+				String currentText = oneObject.getString(Config.JSON_TEXT);
+				
+				isFav = checkIsFavorite(fv, currentId);
 
-				mItemList.add(putData(oneObject.getString(Config.JSON_ID),oneObject.getString(Config.JSON_TEXT)));
+				mItemList.add(putData(currentId,currentText,isFav + ""));
 
 
 				// JSONArray subArray =
@@ -132,37 +142,30 @@ public class TostListFragment extends Fragment {
 	 * @param text
 	 * @return
 	 */
-	private HashMap<String, String> putData(String id, String text) {
+	private HashMap<String, String> putData(String id, String text, String fav) {
 		HashMap<String, String> item = new HashMap<String, String>();
 		item.put(Config.KEY_ID, id);
 		item.put(Config.KEY_TEXT, text);
+		item.put(Config.KEY_FAV, fav);
 		return item;
 	}
-
+	
 	/**
-	 * Method load images from assets (input imageUrl like "folder/image.jpg")
-	 * 
-	 * http://xjaphx.wordpress.com/2011/10/02/store-and-use-files-in-assets/
-	 * 
-	 * @param context
-	 * @param imageUrl
-	 * @return
+	 * Check if already in favorites
 	 */
-	private Drawable getImageFromAsset(Context context, String imageUrl) {
-		// TODO: pull out into separate helper class
-		Drawable mDrawable = null;
-		try {
-			AssetManager mAssetManager = context.getAssets();
-			// get input stream
-			InputStream is = mAssetManager.open(imageUrl);
-			// load image as Drawable
-			mDrawable = Drawable.createFromStream(is, null);
-			is.close();
+	private boolean checkIsFavorite(String fv, String currentId) {
 
-		} catch (IOException e) {
-			e.printStackTrace();
+		boolean checkResult = false;
+
+		String[] fvArray = fv.split(",");
+		for (int i = 0; i < fvArray.length; i++) {
+			if (fvArray[i].equals(currentId)) {
+				// set already in favorites
+				checkResult = true;
+			}
 		}
-
-		return mDrawable;
+		return checkResult;
 	}
+
+
 }

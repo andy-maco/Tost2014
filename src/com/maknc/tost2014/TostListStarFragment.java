@@ -1,7 +1,5 @@
 package com.maknc.tost2014;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,31 +8,32 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.maknc.tost2014.adapters.TostsArrayAdapter;
-import com.maknc.tost2014.parsers.JSONParser;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.maknc.tost2014.adapters.TostsArrayAdapter;
+import com.maknc.tost2014.parsers.JSONParser;
 
 public class TostListStarFragment extends Fragment {
 	
 	private SharedPreferences sharedPref;
+	private TostsArrayAdapter mArrayAdapter;
+	
 	List<HashMap<String, String>> tList = new ArrayList<HashMap<String, String>>();
 	
 	private View mRootView;
 	private TextView mStarEmpty;
+	private ListView mListView;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,39 +51,38 @@ public class TostListStarFragment extends Fragment {
 		mStarEmpty = (TextView)mRootView.findViewById(R.id.tvStarEmpty);
 		mStarEmpty.setText(fav);
 		
-		/*
-		tList = getTosts(R.raw.newtost2014);
+		/* Load list */
+		tList = getStarTosts(R.raw.newtost2014, fav);
 		
 		//Log.d("AAA", "qList: " + qList);
 
-		final TostsArrayAdapter mArrayAdapter = new TostsArrayAdapter(getActivity(), tList);
+		mArrayAdapter = new TostsArrayAdapter(getActivity(), tList);
 		
-		ListView mListView = (ListView) rootView.findViewById(R.id.lvTostsStarFrag);
+		mListView = (ListView) mRootView.findViewById(R.id.lvTostsStarFrag);
 		
 		// Set the ArrayAdapter as the ListView's adapter.
 		mListView.setAdapter(mArrayAdapter);
 		mListView.setTextFilterEnabled(true);
-		*/
 		
 		/* --- Making list clickable --- */
-		/*mListView.setOnItemClickListener(new OnItemClickListener() {
+		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 
-				String pickedQuote = mArrayAdapter.getItem(position).get(
+				String pickedTost = mArrayAdapter.getItem(position).get(
 						Config.KEY_TEXT);
 				String pickedTostId = mArrayAdapter.getItem(position).get(
 						Config.KEY_ID);
 
 				Intent mIntent = new Intent(getActivity(),
 						TostActivity.class);
-				mIntent.putExtra(Config.TAG_TOST_TEXT, pickedQuote);
+				mIntent.putExtra(Config.TAG_TOST_TEXT, pickedTost);
 				mIntent.putExtra(Config.TAG_TOST_ID, pickedTostId);
 				startActivity(mIntent);
 
 			}
-		});			*/
+		});
 				
 
 
@@ -98,9 +96,30 @@ public class TostListStarFragment extends Fragment {
 		/* Read favorites list */
 		sharedPref = getActivity().getSharedPreferences(Config.PREFS, Context.MODE_PRIVATE);
 		String defValue = "";
-		String fav = sharedPref.getString(Config.PREFS_FAVORITES_KEY, defValue);
+		String favReload = sharedPref.getString(Config.PREFS_FAVORITES_KEY, defValue);
 		
-		mStarEmpty.setText(fav);
+		mStarEmpty.setText(favReload);
+		
+		/* Reload */
+		tList.clear();
+		tList = getStarTosts(R.raw.newtost2014, favReload);	
+		//Log.d("OUT", tList + "");
+
+
+		if (mArrayAdapter == null) {
+			mArrayAdapter = new TostsArrayAdapter(getActivity(), tList);
+	        mListView.setAdapter(mArrayAdapter);
+	        //Log.d("OUT", "Adapter NULL");
+	    } else { 
+	    	//Log.d("OUT", "Adapter EXIST");
+	    	mArrayAdapter.updateItemsList(tList);
+	    }
+		
+		/* 
+		// Works but not good
+		mArrayAdapter = new TostsArrayAdapter(getActivity(), tList);
+        mListView.setAdapter(mArrayAdapter);
+        */
 			
 	};
 	
@@ -110,9 +129,11 @@ public class TostListStarFragment extends Fragment {
 	 * @param url
 	 * @return
 	 */
-	private ArrayList<HashMap<String, String>> getTosts(int ResID) {
+	private ArrayList<HashMap<String, String>> getStarTosts(int ResID, String fv) {
 
 		ArrayList<HashMap<String, String>> mItemList = new ArrayList<HashMap<String, String>>();
+		
+		boolean isFav = false;
 
 		// Creating JSON Parser instance
 		JSONParser jParser = new JSONParser();
@@ -135,12 +156,16 @@ public class TostListStarFragment extends Fragment {
 				JSONObject oneObject = jArray.getJSONObject(i);
 				// Pulling items from the array
 				//Items[i] = oneObject.getString(Config.JSON_ID);
+				
+				String currentId = oneObject.getString(Config.JSON_ID);
+				String currentText = oneObject.getString(Config.JSON_TEXT);
+				
+				isFav = checkIsFavorite(fv, currentId);
+				
+				if (isFav) {
+					mItemList.add(putData(currentId,currentText,isFav + ""));
+				}
 
-				mItemList.add(putData(oneObject.getString(Config.JSON_ID),oneObject.getString(Config.JSON_TEXT)));
-
-
-				// JSONArray subArray =
-				// oneObject.getJSONArray(Config.JSON_QUOTES);
 
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -156,37 +181,29 @@ public class TostListStarFragment extends Fragment {
 	 * @param text
 	 * @return
 	 */
-	private HashMap<String, String> putData(String id, String text) {
+	private HashMap<String, String> putData(String id, String text, String fav) {
 		HashMap<String, String> item = new HashMap<String, String>();
 		item.put(Config.KEY_ID, id);
 		item.put(Config.KEY_TEXT, text);
+		item.put(Config.KEY_FAV, fav);
 		return item;
 	}
 
+	
 	/**
-	 * Method load images from assets (input imageUrl like "folder/image.jpg")
-	 * 
-	 * http://xjaphx.wordpress.com/2011/10/02/store-and-use-files-in-assets/
-	 * 
-	 * @param context
-	 * @param imageUrl
-	 * @return
+	 * Check if already in favorites
 	 */
-	private Drawable getImageFromAsset(Context context, String imageUrl) {
-		// TODO: pull out into separate helper class
-		Drawable mDrawable = null;
-		try {
-			AssetManager mAssetManager = context.getAssets();
-			// get input stream
-			InputStream is = mAssetManager.open(imageUrl);
-			// load image as Drawable
-			mDrawable = Drawable.createFromStream(is, null);
-			is.close();
+	private boolean checkIsFavorite(String fv, String currentId) {
 
-		} catch (IOException e) {
-			e.printStackTrace();
+		boolean checkResult = false;
+
+		String[] fvArray = fv.split(",");
+		for (int i = 0; i < fvArray.length; i++) {
+			if (fvArray[i].equals(currentId)) {
+				// set already in favorites
+				checkResult = true;
+			}
 		}
-
-		return mDrawable;
+		return checkResult;
 	}
 }

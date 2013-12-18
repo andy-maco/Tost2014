@@ -36,6 +36,7 @@ public class Config {
 	
 	public static final String KEY_ID = "tost_id";
 	public static final String KEY_TEXT = "tost_text";
+	public static final String KEY_FAV = "tost_fav";
 	
 
 }
