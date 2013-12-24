@@ -1,24 +1,25 @@
 package com.maknc.tost2014;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+
 
 /**
  * Display single quote selected from quotes list activity
@@ -35,6 +36,8 @@ public class TostActivity extends ActionBarActivity {
 
 	/* Menu used for hardware button behavior onKeyUp */
 	private Menu mainMenu;
+	
+	private AdView mAdView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +68,34 @@ public class TostActivity extends ActionBarActivity {
 		 * iv.setImageDrawable(getImageFromAsset(getApplicationContext(),
 		 * mPickedAuthorImage)); }
 		 */
+		
+		mAdView = new AdView(this);
+        mAdView.setAdUnitId(Config.AD_UNIT_ID);
+        mAdView.setAdSize(AdSize.BANNER);
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.adView);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        layout.addView(mAdView, params);
+        mAdView.loadAd(new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build());
 	}
+	
+    @Override
+    protected void onPause() {
+        mAdView.pause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAdView.resume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mAdView.destroy();
+        super.onDestroy();
+    }
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
@@ -147,7 +177,7 @@ public class TostActivity extends ActionBarActivity {
 				SharedPreferences.Editor editor = sharedPref.edit();
 				editor.putString(Config.PREFS_FAVORITES_KEY, fav);
 				editor.commit();
-				Toast.makeText(getApplicationContext(), "Removed from favs: " + fav,
+				Toast.makeText(getApplicationContext(), "Удалено из избранного",
 						Toast.LENGTH_SHORT).show();
 				
 				favButton.setIcon(R.drawable.ic_action_not_important);
@@ -164,7 +194,7 @@ public class TostActivity extends ActionBarActivity {
 				SharedPreferences.Editor editor = sharedPref.edit();
 				editor.putString(Config.PREFS_FAVORITES_KEY, fav);
 				editor.commit();
-				Toast.makeText(getApplicationContext(), "Saved to favs: " + fav,
+				Toast.makeText(getApplicationContext(), "Добавлено в избранное",
 						Toast.LENGTH_SHORT).show();
 
 				// Change menu icon		

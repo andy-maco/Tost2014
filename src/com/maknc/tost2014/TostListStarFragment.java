@@ -48,8 +48,8 @@ public class TostListStarFragment extends Fragment {
 		String defValue = "";
 		String fav = sharedPref.getString(Config.PREFS_FAVORITES_KEY, defValue);
 		
-		mStarEmpty = (TextView)mRootView.findViewById(R.id.tvStarEmpty);
-		mStarEmpty.setText(fav);
+		//mStarEmpty = (TextView)mRootView.findViewById(R.id.tvStarEmpty);
+		//mStarEmpty.setText(fav);
 		
 		/* Load list */
 		tList = getStarTosts(R.raw.newtost2014, fav);
@@ -98,7 +98,7 @@ public class TostListStarFragment extends Fragment {
 		String defValue = "";
 		String favReload = sharedPref.getString(Config.PREFS_FAVORITES_KEY, defValue);
 		
-		mStarEmpty.setText(favReload);
+		//mStarEmpty.setText(favReload);
 		
 		/* Reload */
 		tList.clear();

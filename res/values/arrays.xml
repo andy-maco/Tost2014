@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="Tests">
+        <item>Mark Twain</item>
+        <item>Oscar Wilde</item>
+        <item>Albert Einstein</item>
+        <item>Steve Jobs</item> 
+        <item>Wayne Gretzky</item>
+        <item>Winston Churchill</item>
+    </string-array>
+    
+</resources>

@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Starred list" />
+        android:text="" />
 
     <ListView
         android:id="@+id/lvTostsStarFrag"

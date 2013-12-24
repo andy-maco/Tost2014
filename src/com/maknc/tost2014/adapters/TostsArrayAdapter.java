@@ -38,14 +38,14 @@ public class TostsArrayAdapter extends ArrayAdapter<HashMap<String, String>> {
 		View rowView = inflater.inflate(ROW_LAYOUT_ID, parent, false);
 
 		TextView tv1 = (TextView) rowView.findViewById(R.id.tvQuoteLine);
-		TextView tv2 = (TextView) rowView.findViewById(R.id.tvQuoteTagLine);
+		//TextView tv2 = (TextView) rowView.findViewById(R.id.tvQuoteTagLine);
 		TextView tv3 = (TextView) rowView.findViewById(R.id.tvQuoteNum);
 		ImageView ivStar = (ImageView) rowView.findViewById(R.id.imageRowStar);
 
 		HashMap<String, String> currentValue = values.get(position);
 
 		tv1.setText(currentValue.get(Config.KEY_TEXT));
-		tv2.setText("пример");
+		//tv2.setText("пример");
 		tv3.setText(currentValue.get(Config.KEY_ID));
 		/*int itemNum = position + 1;
 		tv3.setText(itemNum + "");*/

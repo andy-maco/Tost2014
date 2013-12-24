@@ -19,9 +19,9 @@
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/list_frame"
         android:layout_below="@+id/vQuoteUpperBar"
-        android:layout_marginBottom="54dp" >
+        android:layout_marginBottom="54dp"
+        android:background="@drawable/list_frame" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,15 +39,13 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:text="@string/empty_view"
                 android:textSize="16sp" />
-            
         </LinearLayout>
     </ScrollView>
 
-    <View
-        android:id="@+id/vAdvTost"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white" />
+    <RelativeLayout
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

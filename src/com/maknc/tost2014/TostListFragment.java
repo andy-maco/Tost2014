@@ -94,25 +94,25 @@ public class TostListFragment extends Fragment {
 		ArrayList<HashMap<String, String>> mItemList = new ArrayList<HashMap<String, String>>();
 		
 		boolean isFav = false;
-
+	
 		// Creating JSON Parser instance
 		JSONParser jParser = new JSONParser();
-
+	
 		// getting JSON string from URL
 		JSONObject jObject = jParser.getJSONFromRaw(getActivity(), ResID);
-
+	
 		JSONArray jArray = null;
 		try {
 			jArray = jObject.getJSONArray(Config.JSON_TOSTS_ARRAY);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
+	
 		//String[] Items = new String[jArray.length()];
-
+	
 		for (int i = 0; i < jArray.length(); i++) {
 			try {
-
+	
 				JSONObject oneObject = jArray.getJSONObject(i);
 				// Pulling items from the array
 				//Items[i] = oneObject.getString(Config.JSON_ID);
@@ -121,18 +121,18 @@ public class TostListFragment extends Fragment {
 				String currentText = oneObject.getString(Config.JSON_TEXT);
 				
 				isFav = checkIsFavorite(fv, currentId);
-
+	
 				mItemList.add(putData(currentId,currentText,isFav + ""));
-
-
+	
+	
 				// JSONArray subArray =
 				// oneObject.getJSONArray(Config.JSON_QUOTES);
-
+	
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
-
+	
 		return mItemList;
 	}
 

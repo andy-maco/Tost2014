@@ -24,6 +24,6 @@
  <color name="lightgreen">#9cb36a</color>
  <color name="darkgreen">#405f10</color>
  <color name="bg_main">#dbd0be</color>
- <color name="bg_left_bar">#5c8817</color>
+ <color name="bg_left_bar">#9cb36a</color>
  <color name="bg_ab_dark">#5c8817</color>
 </resources>
