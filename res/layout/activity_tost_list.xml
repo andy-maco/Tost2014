@@ -21,7 +21,7 @@
             android:layout_height="42dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/cocktail3" />
+            android:src="@drawable/ab_bq" />
 
         <TextView
             android:id="@+id/tvAuthorInQuotesList"
