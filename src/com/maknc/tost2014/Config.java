@@ -13,6 +13,7 @@ public class Config {
 	
 	public static final String PREFS = "com.maknc.tost2014.PREFERENCE_FILE_KEY";
 	public static final String PREFS_FAVORITES_KEY = "favorites";
+	public static final String FAV_DEF_VALUE = "";
 	
 	/* Intents tags */
 	protected static final String TAG_AUTHOR = "com.andreimak.brightquotes.TAG_AUTHOR";

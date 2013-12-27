@@ -12,5 +12,7 @@
     <string name="about_app_version">Version</string>
     <string name="title_activity_main">New Year Tost</string>
     <string name="ab_menu_favorites">Favorites</string>
+    <string name="detail_id_label">toast</string>
+    
 
 </resources>

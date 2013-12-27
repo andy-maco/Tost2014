@@ -67,7 +67,7 @@ public class TostListFragment extends Fragment {
 						Config.KEY_ID);
 
 				Intent mIntent = new Intent(getActivity(),
-						TostActivity.class);
+						DetailActivity.class);
 				mIntent.putExtra(Config.TAG_TOST_TEXT, pickedQuote);
 				mIntent.putExtra(Config.TAG_TOST_ID, pickedTostId);
 				startActivity(mIntent);

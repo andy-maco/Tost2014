@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:myapp="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/menu_share"
+        android:icon="@drawable/ic_action_share"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/ab_menu_favorites"
+        myapp:showAsAction="ifRoom"/>
+
+</menu>

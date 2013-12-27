@@ -12,5 +12,6 @@
     <string name="about_app_version">Версия</string>
     <string name="title_activity_main">Новогодние тосты</string>
     <string name="ab_menu_favorites">Избранное</string>
+    <string name="detail_id_label">тост</string>
 
 </resources>

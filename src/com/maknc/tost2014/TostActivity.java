@@ -68,6 +68,8 @@ public class TostActivity extends ActionBarActivity {
 		 * iv.setImageDrawable(getImageFromAsset(getApplicationContext(),
 		 * mPickedAuthorImage)); }
 		 */
+		TextView tvId = (TextView) findViewById(R.id.tvDetailTostId); 
+		tvId.setText(mPickedTostId);
 		
 		mAdView = new AdView(this);
         mAdView.setAdUnitId(Config.AD_UNIT_ID);
