@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.maknc.tost2014.AboutActivity;
 import com.maknc.tost2014.Config;
+import com.maknc.tost2014.DetailActivity;
 import com.maknc.tost2014.MainActivity;
 import com.maknc.tost2014.R;
 
@@ -63,10 +64,6 @@ public class DetailPagerAdapter extends FragmentStatePagerAdapter {
 		String mDetailText;
 		boolean mIsFavorite;
 		
-		/* Menu used for hardware button behavior onKeyUp */
-		private Menu mainMenuFragment;
-		private MenuItem favButton;
-		
 		private static SharedPreferences sharedPref;
 
 		/**
@@ -102,7 +99,7 @@ public class DetailPagerAdapter extends FragmentStatePagerAdapter {
 			 * Show action bar menu for fragment
 			 * http://www.grokkingandroid.com/adding-action-items-from-within-fragments/
 			 */
-			setHasOptionsMenu(true);
+			//setHasOptionsMenu(true);
 			
 			/*try {
 				favButton = mainMenuFragment.findItem(R.id.menu_favorites);
@@ -132,7 +129,6 @@ public class DetailPagerAdapter extends FragmentStatePagerAdapter {
 			 View tvNum = v.findViewById(R.id.tvDetailId);
 			 ((TextView)tvNum).setText((mNum + 1) + "");
 			 
-			 //TODO: Set fav ico here!
 
 			/*View tv = v.findViewById(R.id.detailFragmentText);
 
@@ -147,12 +143,45 @@ public class DetailPagerAdapter extends FragmentStatePagerAdapter {
 		}
 		
 		@Override
+		public void onActivityCreated(Bundle savedInstanceState) {
+			super.onActivityCreated(savedInstanceState);
+		}
+		
+		
+/*		@Override
+		public void onStart() {
+			super.onStart();	
+			
+			//TODO: Set fav ico here!
+			 ((DetailActivity) getActivity()).updateFavIcon(mIsFavorite);
+		}
+		
+		@Override
+		public void onResume() {
+			super.onResume();	
+			
+			//TODO: Set fav ico here!
+			 ((DetailActivity) getActivity()).updateFavIcon(mIsFavorite);
+		}*/
+		
+		@Override
+		public void setUserVisibleHint(boolean isVisibleToUser) {
+		    super.setUserVisibleHint(isVisibleToUser);
+		    if (isVisibleToUser) {
+		    	((DetailActivity) getActivity()).currentFragmentNum = (mNum + 1) + "";
+		    	((DetailActivity) getActivity()).updateFavIcon(mIsFavorite);
+		    }
+		    else {  }
+		}
+		
+		
+		/*@Override
 		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 			// Inflate the menu; this adds items to the action bar if it is present.
 			inflater.inflate(R.menu.tost_menu_frag, menu);
 			//menu.clear();
 			//mainMenuFragment = menu;
-		}
+		}*/
 		
 		/*@Override
 		public boolean onOptionsItemSelected(MenuItem item) {

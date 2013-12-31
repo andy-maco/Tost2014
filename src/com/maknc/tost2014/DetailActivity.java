@@ -37,6 +37,7 @@ public class DetailActivity extends ActionBarActivity {
     
 	private String mPickedTostId;
 	public boolean isFavorite;
+	public String currentFragmentNum = "";
 	
 	/* Menu used for hardware button behavior onKeyUp */
 	private Menu mainMenu;
@@ -57,13 +58,9 @@ public class DetailActivity extends ActionBarActivity {
 		String defValue = "";
 		String fav = sharedPref.getString(Config.PREFS_FAVORITES_KEY, defValue);
 		
-		//favButton = mainMenu.findItem(R.id.menu_favorites);
-		
 		tList = getTosts(R.raw.newtost2014, fav);
-		
 
         mAdapter = new DetailPagerAdapter(getSupportFragmentManager(), tList);
-
         mDetailPager = (ViewPager)findViewById(R.id.detailPager);
         mDetailPager.setAdapter(mAdapter);
         
@@ -75,6 +72,9 @@ public class DetailActivity extends ActionBarActivity {
 		int pageId = Integer.parseInt(mPickedTostId) - 1;
 		
 		mDetailPager.setCurrentItem(pageId);
+		
+		
+		
 		
         /*
         // Watch for button clicks.
@@ -179,12 +179,15 @@ public class DetailActivity extends ActionBarActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.tost_menu, menu);
 		mainMenu = menu;
+		favButton = mainMenu.findItem(R.id.menu_favorites);
 		return true;
 	}
 
-	@Override
+/*	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		 //Dynamically change favorites icon in action bar 
+		
+		Log.i("TEST", "onPrepareOptionsMenu started");
 
 		 //Check if already in favorites 
 		sharedPref = getSharedPreferences(Config.PREFS, Context.MODE_PRIVATE);
@@ -200,9 +203,9 @@ public class DetailActivity extends ActionBarActivity {
 		}
 		return super.onPrepareOptionsMenu(menu);
 
-	}
+	}*/
 
-	/*		@Override
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
@@ -224,23 +227,22 @@ public class DetailActivity extends ActionBarActivity {
 			startActivity(mIntentAbout);
 			return true;
 		case R.id.menu_favorites:
-			 Save or remove from favorites 
-			
-			
+			//Save or remove from favorites 
 			sharedPref = getSharedPreferences(Config.PREFS,
 					Context.MODE_PRIVATE);
 			String fav = sharedPref.getString(Config.PREFS_FAVORITES_KEY,
 					Config.FAV_DEF_VALUE);
 			
 			// TODO: Temporary
-			fav = mPageListener.getCurrentPage() + "";
+			//String curFav = mPageListener.getCurrentPage() + "";
+			String curFav = currentFragmentNum;
 
-			 Check if already in favorites 
-			isFavorite = checkIsFavorite(fav, mPickedTostId);
+			//Check if already in favorites 
+			isFavorite = checkIsFavorite(fav, curFav);
 
-			 Write to favorites or remove 
+			 //Write to favorites or remove 
 			if (isFavorite) {
-				fav = removeFromFavorite(fav, mPickedTostId);
+				fav = removeFromFavorite(fav, curFav);
 				
 				// Write to favorites
 				SharedPreferences.Editor editor = sharedPref.edit();
@@ -254,9 +256,9 @@ public class DetailActivity extends ActionBarActivity {
 				
 				// Add to favorites string
 				if (fav.equals("")) {
-					fav = mPickedTostId;
+					fav = curFav;
 				} else {
-					fav = fav + "," + mPickedTostId;
+					fav = fav + "," + curFav;
 				}
 				
 				// Write to favorites
@@ -275,8 +277,7 @@ public class DetailActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-
-	*//**
+	/**
 	 * Menu hardware button open action bar menu
 	 * 
 	 * http://stackoverflow.com/questions/12277262/
@@ -337,22 +338,15 @@ public class DetailActivity extends ActionBarActivity {
 		return clearResult;
 	}
 	
-	@Override
+/*	@Override
 	public void onAttachFragment (Fragment fragment) {
-	    Log.i("TEST", "onAttachFragment: "+fragment);
+	    Log.i("TEST", "onAttachFragment: " + fragment + " favBtn: " + favButton);
 	    if(fragment.getClass()==DetailFragment.class){
 	        //fragList.add(new WeakReference<EventListFragment>((EventListFragment)fragment));
 	    	//updateFavIcon();
 	    	//TODO: Implement favorites icon set
 	    }
-	}
-	
-	@Override
-	protected void onStart() {
-		super.onStart();
-		Log.i("TEST", "onStart");
-		//TODO: Remove
-	}
+	}*/
 	
 	/**
 	 * Set ActionBar Favorites icon
@@ -361,16 +355,31 @@ public class DetailActivity extends ActionBarActivity {
 	private void setFavIcon (boolean isFav) {
 		// Change menu icon
 		if (isFav) {
-			favButton.setIcon(R.drawable.ic_action_important);
+			try {
+				favButton.setIcon(R.drawable.ic_action_important);
+				Log.i("TEST", "favButton.setIcon i DONE");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				Log.i("TEST", "Exception i " + e);
+			}
 		} else {
-			favButton.setIcon(R.drawable.ic_action_not_important);
+			try {
+				favButton.setIcon(R.drawable.ic_action_not_important);
+				Log.i("TEST", "favButton.setIcon non i DONE");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				Log.i("TEST", "Exception non i " + e);
+			}
 		}
 	}
 	
 	/**
 	 * Update ActionBar Favorites icon
 	 */
-	public void updateFavIcon () {
-		setFavIcon(isFavorite);
+	public void updateFavIcon (boolean isFv) {
+		//String currenFragNum = mPageListener.getCurrentPage() + "";
+		
+		setFavIcon(isFv);
+		Log.i("TEST", "updateFavIcon " + currentFragmentNum + " isFv: " + isFv);
 	}
 }
